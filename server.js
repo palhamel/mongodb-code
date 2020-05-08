@@ -1,6 +1,33 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import mongoose from 'mongoose'
+
+
+
+// Database setup:
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/books"
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.Promise = Promise
+
+// Mongoose model setup:
+const Author = mongoose.model('Author', {
+  name: String,
+})
+
+ // Seed db using Async:
+const seedDatabase = async () => {
+  const tolkien = new Author({ name: 'J.R.R Tolkien' })
+  await tolkien.save()
+
+  const rowling = new Author({ name: 'J.K Rowling' })
+  await rowling.save()
+  
+  console.log('hey hey Pål du e grymm')
+}
+seedDatabase()
+
+
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -15,8 +42,22 @@ app.use(bodyParser.json())
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello WWworld')
 })
+
+// a RESTful route to return all Authors:
+
+app.get('/authors', async (req, res) => {
+  const authors = await Author.find()
+  res.json(authors)
+})
+
+
+
+
+
+
+
 
 // Start the server
 app.listen(port, () => {
