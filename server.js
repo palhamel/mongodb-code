@@ -17,13 +17,16 @@ const Author = mongoose.model('Author', {
 
  // Seed db using Async:
 const seedDatabase = async () => {
+  // First clear database - then populate database:
+  await Author.deleteMany()
+
   const tolkien = new Author({ name: 'J.R.R Tolkien' })
   await tolkien.save()
 
   const rowling = new Author({ name: 'J.K Rowling' })
   await rowling.save()
   
-  console.log('hey hey Pål du e grymm')
+  console.log('Mr Robot here: hey hey Pål du e grymm')
 }
 seedDatabase()
 
